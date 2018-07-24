@@ -30,6 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+#重载系统的用户，让UserProfile生效
+AUTH_USER_MODEL = 'users.UserProfile'
+
 # Application definition
 
 INSTALLED_APPS = [
