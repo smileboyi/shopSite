@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 
 #重载系统的用户，让UserProfile生效
-AUTH_USER_MODEL = 'users.UserProfile'
+# AUTH_USER_MODEL = 'users.UserProfile'
 
 # Application definition
 
@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'DjangoUeditor',
+    'xadmin',
+    'crispy_forms',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shop_site',    #数据库名字
         'USER': 'root',         #账号
-        'PASSWORD': '123456',   #密码
+        'PASSWORD': '',   #密码
         'HOST': '127.0.0.1',    #IP
         'PORT': '3306',         #端口
         # 默认引擎myisam,第三方登录时，要求引擎为INNODB
@@ -129,7 +133,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
