@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     # ModuleNotFoundError：pip install django-crispy-forms
     'crispy_forms',
     'users',
+    'goods',
+    'trade',
+    'user_operation'
 ]
 
 MIDDLEWARE = [
