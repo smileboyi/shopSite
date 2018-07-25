@@ -136,13 +136,13 @@ class IndexAd(models.Model):
 
 # 热搜词
 class HotSearchWords(models.Model):
-    keywords = models.CharField("热搜词",default="", max_length=20)
-    index = models.IntegerField("排序",default=0)
-    add_time = models.DateTimeField("添加时间", default=datetime.now)
+	keywords = models.CharField("热搜词",default="", max_length=20)
+	index = models.IntegerField("排序",default=0)
+	add_time = models.DateTimeField("添加时间", default=datetime.now)
 
-    class Meta:
-        verbose_name = '热搜排行'
-        verbose_name_plural = verbose_name
+	class Meta:
+		verbose_name = '热搜排行'
+		verbose_name_plural = verbose_name
 
-    def __str__(self):
-        return self.keywords
+	def __str__(self):
+		return self.keywords

@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'DjangoUeditor',
+    # 源码安装xadmin时，会报ModuleNotFoundError，需要手动安装需要的模块，
+    # 还有一些问题：http://www.lybbn.cn/data/bbsdatas.php?lybbs=50
     'xadmin',
+    # ModuleNotFoundError：pip install django-crispy-forms
     'crispy_forms',
     'users',
 ]
