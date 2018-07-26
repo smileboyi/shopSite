@@ -27,7 +27,7 @@ class UserProfile(AbstractUser):
 
 # 验证码
 class VerifyCode(models.Model):
-	# 一般还有个类型字段
+	# 一般还有个类型字段，登录注册找回密码等等
 	code = models.CharField("验证码",max_length=10)
 	mobile = models.CharField("电话",max_length=11)
 	add_time = models.DateTimeField("添加时间",default=datetime.now)

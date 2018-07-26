@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 
 #重载系统的用户，让UserProfile生效
-# AUTH_USER_MODEL = 'users.UserProfile'
+AUTH_USER_MODEL = 'users.UserProfile'
 
 # Application definition
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 使用pip安装是python2版本，python3版本需源码安装
     'DjangoUeditor',
     # 源码安装xadmin时，会报ModuleNotFoundError，需要手动安装需要的模块，
     # 还有一些问题：http://www.lybbn.cn/data/bbsdatas.php?lybbs=50
@@ -100,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shop_site',    #数据库名字
         'USER': 'root',         #账号
-        'PASSWORD': '',   #密码
+        'PASSWORD': '123456',   #密码
         'HOST': '127.0.0.1',    #IP
         'PORT': '3306',         #端口
         # 默认引擎myisam,第三方登录时，要求引擎为INNODB
