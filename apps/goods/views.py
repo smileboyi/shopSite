@@ -12,6 +12,11 @@ from rest_framework import viewsets
 
 from rest_framework.pagination import PageNumberPagination
 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+from .filters import GoodsFilter
+
 from .models import Goods
 # Create your views here.
 
@@ -60,8 +65,27 @@ class GoodsListView(generics.ListAPIView):
 # 同时，ViewSet为我们提供了默认的URL结构, 使得我们能更专注于API本身。
 class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
 	'商品列表页'
-	#这里必须要定义一个默认的排序,否则会报错
+	# 查询集，这里必须要定义一个默认的排序,否则会报错
 	queryset = Goods.objects.all().order_by('id')
+
+	# 序列化
 	serializer_class = GoodsSerializer
 
+	# 分页
 	pagination_class = GoodsPagination
+
+	# 使用后端过滤，使用搜索过滤和排序过滤
+	filter_backends = (DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter)
+	# 可以搜索的字段
+	"""
+	'^' ：以xx字符串开始搜索
+	'=' ：完全匹配
+	'@' ：全文搜索（目前只支持Django的MySQL后端）
+	'$' ：正则表达式搜索
+	"""
+	search_fields = ('=name', 'goods_brief', 'goods_desc')
+ 	# 需要排序的字段
+	ordering_fields = ('sold_num', 'shop_price')
+
+	# 使用前端过滤，表单组合
+	filter_class = GoodsFilter

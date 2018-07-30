@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'goods',
     'trade',
     'user_operation',
-    'rest_framework'
+    'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -161,4 +162,6 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 REST_FRAMEWORK = {
     # 分页风格
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 过滤
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
