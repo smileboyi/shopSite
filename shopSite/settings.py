@@ -155,3 +155,10 @@ STATICFILES_DIRS = (
 # 设置上传文件的路径
 MEDIA_URL="/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
+
+
+
+REST_FRAMEWORK = {
+    # 分页风格
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+}
