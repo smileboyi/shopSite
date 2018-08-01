@@ -95,7 +95,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shopSite.wsgi.application'
 
-
+# 认证后台列表
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
     'social_core.backends.weibo.WeiboOAuth2',
@@ -121,7 +121,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shop_site',    #数据库名字
         'USER': 'root',         #账号
-        'PASSWORD': '123456',   #密码
+        'PASSWORD': '',   #密码
         'HOST': '127.0.0.1',    #IP
         'PORT': '3306',         #端口
         # 默认引擎myisam,第三方登录时，要求引擎为INNODB
@@ -196,3 +196,9 @@ REST_FRAMEWORK = {
 }
 
 
+import datetime
+#有效期限
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),    #也可以设置seconds=20
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',                       #JWT跟前端保持一致，比如“token”这里设置成JWT
+}
