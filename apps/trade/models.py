@@ -12,6 +12,7 @@ User = get_user_model()
 
 # 购物车
 class ShoppingCart(models.Model):
+	# 添加用户控制入口，只有通过身份验证的用户可以创建、更新、删除实例
 	user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")
 	goods = models.ForeignKey(Goods, on_delete=models.CASCADE, verbose_name="商品")
 	nums = models.IntegerField("购买数量",default=0)

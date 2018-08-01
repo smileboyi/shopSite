@@ -100,3 +100,8 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
 	'''
 	queryset = GoodsCategory.objects.filter(category_type=1)
 	serializer_class = CategorySerializer
+
+
+
+
+

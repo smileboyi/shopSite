@@ -59,6 +59,7 @@ class GoodsSerializer(serializers.ModelSerializer):
 	商品列表序列化
 	'''
 	# 覆盖外键字段，返回嵌套信息。不覆盖默认返回主表主键
+	# category为反向引用，不会被fields默认包含，所以需要添加显示字段
 	category = CategorySerializer()
 	class Meta:
 		model = Goods

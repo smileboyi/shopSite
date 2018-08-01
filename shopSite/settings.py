@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'coreschema',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8000',
+)
 
 ROOT_URLCONF = 'shopSite.urls'
 
@@ -88,6 +94,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'shopSite.wsgi.application'
+
+
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+    'social_core.backends.weibo.WeiboOAuth2',
+    'social_core.backends.qq.QQOAuth2',
+    'social_core.backends.weixin.WeixinOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 
 
 # Database
@@ -165,5 +181,18 @@ REST_FRAMEWORK = {
     # 分页风格
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 过滤
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    # TokenAuthentication提供request.user和request.凭证
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # drf的token缺点：
+        # 保存在数据库中，如果是一个分布式的系统，就非常麻烦
+        # token永久有效，没有过期时间
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
 }
+
+

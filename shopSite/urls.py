@@ -17,7 +17,13 @@ Including another URLconf
 from django.urls import path, include, re_path
 import xadmin
 
+from django.views.static import serve
+from shopSite.settings import MEDIA_ROOT
+
 from rest_framework.documentation import include_docs_urls
+
+from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_jwt.views import obtain_jwt_token
 
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
@@ -34,12 +40,20 @@ router.register(r'categorys', CategoryViewSet, base_name="categorys")
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('ueditor/', include('DjangoUeditor.urls')),
+    # 添加rest_framework自带的登录窗口url
+    path('api-auth/',include('rest_framework.urls')),
+    # 资源文件
+    path('media/<path:path>',serve,{'document_root':MEDIA_ROOT}),
     # drf文档
     path('docs',include_docs_urls(title='drf文档')),
-    path('api-auth/',include('rest_framework.urls')),
 
+    # 商品列表页
     # path('goods/',GoodsListView.as_view(),name='goods-list')
-
-    #商品列表页
     re_path('^', include(router.urls)),
+
+    # token认证
+    path('api-token-auth/', obtain_auth_token),
+    # jwt的token认证接口
+    path('login/', obtain_jwt_token ),
+
 ]
