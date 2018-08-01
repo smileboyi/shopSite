@@ -4,8 +4,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from goods.serializers import GoodsSerializer
-
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import viewsets
@@ -15,9 +13,11 @@ from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-from .filters import GoodsFilter
+from goods.serializers import GoodsSerializer,CategorySerializer
 
-from .models import Goods
+from goods.filters import GoodsFilter
+
+from goods.models import Goods,GoodsCategory
 # Create your views here.
 
 
@@ -64,7 +64,9 @@ class GoodsListView(generics.ListAPIView):
 # ViewSet类与View类其实几乎是相同的,但提供的是read或update这些操作,而不是get或put等HTTP动作。
 # 同时，ViewSet为我们提供了默认的URL结构, 使得我们能更专注于API本身。
 class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
-	'商品列表页'
+	'''
+	商品列表，分页，搜索，过滤，排序
+	'''
 	# 查询集，这里必须要定义一个默认的排序,否则会报错
 	queryset = Goods.objects.all().order_by('id')
 
@@ -89,3 +91,12 @@ class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
 
 	# 使用前端过滤，表单组合
 	filter_class = GoodsFilter
+
+
+
+class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+	'''
+	商品分类列表数据(get)
+	'''
+	queryset = GoodsCategory.objects.filter(category_type=1)
+	serializer_class = CategorySerializer

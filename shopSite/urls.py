@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
-from goods.views import GoodsListViewSet
+from goods.views import GoodsListViewSet,CategoryViewSet
 
 
 from rest_framework.routers import DefaultRouter
@@ -29,7 +29,7 @@ router = DefaultRouter()
 
 #配置goods的url
 router.register(r'goods', GoodsListViewSet,base_name='goods')
-
+router.register(r'categorys', CategoryViewSet, base_name="categorys")
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),

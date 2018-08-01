@@ -55,9 +55,11 @@ INSTALLED_APPS = [
     'user_operation',
     'rest_framework',
     'django_filters',
+    'coreschema',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',   # 必须在CsrfViewMiddleware之前
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
