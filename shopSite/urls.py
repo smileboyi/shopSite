@@ -33,14 +33,17 @@ from goods.views import GoodsListViewSet,CategoryViewSet
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 
+# DefaultRouter类会自动为我们创建the API root view，所以我们可以删除api_root
 #配置goods的url
 router.register(r'goods', GoodsListViewSet,base_name='goods')
+#配置categorys的url
 router.register(r'categorys', CategoryViewSet, base_name="categorys")
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('ueditor/', include('DjangoUeditor.urls')),
     # 添加rest_framework自带的登录窗口url
+    # api-auth/login/和api-auth/logout/
     path('api-auth/',include('rest_framework.urls')),
     # 资源文件
     path('media/<path:path>',serve,{'document_root':MEDIA_ROOT}),
@@ -57,3 +60,18 @@ urlpatterns = [
     path('login/', obtain_jwt_token ),
 
 ]
+
+
+
+"""
+drf流程：
+Models
+  ↓
+Serializers
+  ↓
+Viewsets
+  ↓
+Routers
+  ↓
+Urls
+"""

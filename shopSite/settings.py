@@ -37,7 +37,9 @@ AUTH_USER_MODEL = 'users.UserProfile'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    # 包含认证框架的核心和默认的模型
     'django.contrib.auth',
+    # django内容类型系统，它允许权限与你创建的模型关联
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -62,10 +64,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',   # 必须在CsrfViewMiddleware之前
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 管理会话
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 使用会话将用户与请求关联
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -97,7 +99,7 @@ WSGI_APPLICATION = 'shopSite.wsgi.application'
 
 # 认证后台列表
 AUTHENTICATION_BACKENDS = (
-    'users.views.CustomBackend',
+    'users.views.CustomBackend',   # 使用自定义基本认证
     'social_core.backends.weibo.WeiboOAuth2',
     'social_core.backends.qq.QQOAuth2',
     'social_core.backends.weixin.WeixinOAuth2',
@@ -121,7 +123,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shop_site',    #数据库名字
         'USER': 'root',         #账号
-        'PASSWORD': '',   #密码
+        'PASSWORD': '123456',   #密码
         'HOST': '127.0.0.1',    #IP
         'PORT': '3306',         #端口
         # 默认引擎myisam,第三方登录时，要求引擎为INNODB
@@ -182,8 +184,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 过滤
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    # TokenAuthentication提供request.user和request.凭证
-
+    # 认证模式
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -192,7 +193,7 @@ REST_FRAMEWORK = {
         # token永久有效，没有过期时间
         # 'rest_framework.authentication.TokenAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    )
+    ),
 }
 
 
