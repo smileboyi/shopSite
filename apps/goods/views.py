@@ -63,7 +63,7 @@ class GoodsListView(generics.ListAPIView):
 
 # ViewSet类与View类其实几乎是相同的,但提供的是read或update这些操作,而不是get或put等HTTP动作。
 # 同时，ViewSet为我们提供了默认的URL结构, 使得我们能更专注于API本身。
-class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
+class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 	'''
 	商品列表，分页，搜索，过滤，排序
 	'''

@@ -8,7 +8,7 @@ User = get_user_model()
 
 # 用户收藏操作
 class UserFav(models.Model):
-	# 这里不是直接存user id 和 goods id，而是通过外键扩展了User表和Goods表
+	# 这里不是直接存user id 和 goods id，而是通过外键扩展了User表和Goods表（收藏的数据依赖于这2个模型）
 	user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")
 	goods = models.ForeignKey(Goods, on_delete=models.CASCADE, verbose_name="商品", help_text="商品id")
 	add_time = models.DateTimeField("添加时间",default=datetime.now)

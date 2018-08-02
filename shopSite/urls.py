@@ -28,16 +28,20 @@ from rest_framework_jwt.views import obtain_jwt_token
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
 from goods.views import GoodsListViewSet,CategoryViewSet
+from user_operation.views import UserFavViewset
+
 
 
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 
 # DefaultRouter类会自动为我们创建the API root view，所以我们可以删除api_root
-#配置goods的url
+# 配置goods的url
 router.register(r'goods', GoodsListViewSet,base_name='goods')
-#配置categorys的url
+# 配置categorys的url
 router.register(r'categorys', CategoryViewSet, base_name="categorys")
+# 配置用户收藏的url
+router.register(r'userfavs', UserFavViewset, base_name="userfavs")
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),

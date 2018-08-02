@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Goods,GoodsCategory
+from .models import Goods,GoodsCategory,GoodsImage
 
 """
 class GoodsSerializer(serializers.Serializer):
@@ -54,6 +54,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 
+class GoodsImageSerializer(serializers.ModelSerializer):
+	'''
+	轮播图
+	'''
+	class Meta:
+		model = GoodsImage
+		fields = ("image",)
+
+
+
 class GoodsSerializer(serializers.ModelSerializer):
 	'''
 	商品列表序列化
@@ -61,6 +71,9 @@ class GoodsSerializer(serializers.ModelSerializer):
 	# 覆盖外键字段，返回嵌套信息。不覆盖默认返回主表主键
 	# category为反向引用，不会被fields默认包含，所以需要添加显示字段
 	category = CategorySerializer()
+
+	# 也是一个外键，如果要序列化所有字段加上many=True
+	images = GoodsImageSerializer(many=True)
 	class Meta:
 		model = Goods
 		fields = "__all__"
