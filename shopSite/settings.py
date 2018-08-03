@@ -27,7 +27,7 @@ SECRET_KEY = 'nvwbiy*u@37u9m3q1hz_3f$3^dm6cgty$@q=kty#d)j$3bq1hs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost','wl22.free.ngrok.cc',]
 
 
 #重载系统的用户，让UserProfile生效
@@ -203,3 +203,10 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),    #也可以设置seconds=20
     'JWT_AUTH_HEADER_PREFIX': 'JWT',                       #JWT跟前端保持一致，比如“token”这里设置成JWT
 }
+
+
+# 手机号码正则表达式
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
+
+# 云片
+APIKEY = "2b65704bc23ae4ed25f1aa59d61563c1"
