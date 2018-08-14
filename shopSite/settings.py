@@ -123,7 +123,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shop_site',    #数据库名字
         'USER': 'root',         #账号
-        'PASSWORD': '123456',   #密码
+        'PASSWORD': '',   #密码
         'HOST': '127.0.0.1',    #IP
         'PORT': '3306',         #端口
         # 默认引擎myisam,第三方登录时，要求引擎为INNODB

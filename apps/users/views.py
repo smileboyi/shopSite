@@ -11,7 +11,7 @@ from django.db.models import Q
 from rest_framework import mixins,viewsets
 from rest_framework.mixins import CreateModelMixin
 
-from users.serializers import SmsSerializer
+from users.serializers import SmsSerializer,UserRegSerializer
 
 from utils.yunpian import YunPian
 from shopSite.settings import APIKEY
@@ -64,6 +64,7 @@ class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 	# 继承CreateModelMixin,重写create
 	def create(self, request, *args, **kwargs):
 		serializer = self.get_serializer(data=request.data)
+		# 验证数据的合法性，如果不合法则不会执行后面的代码，并且返回带有mobile属性的dict给前端
 		serializer.is_valid(raise_exception=True)
 
 		code = self.generate_code()   # 4位数
@@ -71,7 +72,6 @@ class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 		yun_pian = YunPian(APIKEY)  # YunPian实例
 
 		sms_status = yun_pian.send_sms(code=code, mobile=mobile)
-
 		# 发送状态识别
 		if sms_status["code"] != 0:
 			# 失败=>请求错误
@@ -83,3 +83,13 @@ class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 			code_record = VerifyCode(code=code, mobile=mobile)
 			code_record.save()
 			return Response({ "mobile": mobile }, status=status.HTTP_201_CREATED)
+
+
+
+class userViewset(CreateModelMixin,viewsets.GenericViewSet):
+	'''
+	用户
+	'''
+	serializer_class = UserRegSerializer
+
+

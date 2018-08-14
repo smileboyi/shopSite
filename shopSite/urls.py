@@ -29,9 +29,9 @@ from rest_framework_jwt.views import obtain_jwt_token
 # from goods.views import GoodsListView
 from goods.views import GoodsListViewSet,CategoryViewSet
 from user_operation.views import UserFavViewset
-from users.views import SmsCodeViewset
+from users.views import SmsCodeViewset,userViewset
 
-
+from django.views.generic import TemplateView
 
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
@@ -45,6 +45,9 @@ router.register(r'categorys', CategoryViewSet, base_name="categorys")
 router.register(r'userfavs', UserFavViewset, base_name="userfavs")
 # 配置codes的url
 router.register(r'code', SmsCodeViewset, base_name="code")
+# 配置users的url
+router.register(r'usesr', userViewset, base_name="users")
+
 
 
 urlpatterns = [
@@ -61,6 +64,9 @@ urlpatterns = [
     # 商品列表页
     # path('goods/',GoodsListView.as_view(),name='goods-list')
     re_path('^', include(router.urls)),
+
+    # 首页
+    path('index/', TemplateView.as_view(template_name='index.html'),name='index'),
 
     # token认证
     path('api-token-auth/', obtain_auth_token),
