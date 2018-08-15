@@ -29,6 +29,7 @@ class UserProfile(AbstractUser):
 class VerifyCode(models.Model):
 	# 一般还有个类型字段，登录注册找回密码等等
 	code = models.CharField("验证码",max_length=10)
+	# 注意手机不是唯一，因为用户可以多次获取验证码，那么就会有多个实例
 	mobile = models.CharField("电话",max_length=11)
 	# 需要一个时间记录，以控制获取验证码频率，前端虽然能控制频率，但可以通过手段跳过检查
 	add_time = models.DateTimeField("添加时间",default=datetime.now)

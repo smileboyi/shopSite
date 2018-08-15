@@ -43,7 +43,7 @@ class CustomBackend(ModelBackend):
 
 
 
-
+# 仅仅是发送验证码的视图，不会暂存code，配合用户注册时需要通过VerifyCode保存一份code
 class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 	'''
 	发送短信验证码

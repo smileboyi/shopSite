@@ -46,7 +46,7 @@ router.register(r'userfavs', UserFavViewset, base_name="userfavs")
 # 配置codes的url
 router.register(r'code', SmsCodeViewset, base_name="code")
 # 配置users的url
-router.register(r'usesr', userViewset, base_name="users")
+router.register(r'users', userViewset, base_name="users")
 
 
 

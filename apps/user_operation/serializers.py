@@ -30,4 +30,5 @@ class UserFavSerializer(serializers.ModelSerializer):
 			)
 		]
 		model = UserFav
+		# 收藏的时候需要返回商品的id，因为取消收藏的时候必须知道商品的id是多少
 		fields = ("user","goods","id")
