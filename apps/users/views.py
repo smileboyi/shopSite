@@ -19,6 +19,9 @@ from shopSite.settings import APIKEY
 from rest_framework.response import Response
 from rest_framework import status
 
+# jwt介绍：https://blog.csdn.net/liuwenbiao1203/article/details/52351772
+from rest_framework_jwt.serializers import jwt_encode_handler,jwt_payload_handler
+
 # 传入一个列表，元组或字符串，返回随机项
 from random import choice
 
@@ -93,4 +96,57 @@ class userViewset(CreateModelMixin,viewsets.GenericViewSet):
 	serializer_class = UserRegSerializer
 	queryset = User.objects.all()
 
+	def create(self, request, *args, **kwargs):
+		# 前面不变，保存数据
+		serializer = self.get_serializer(data=request.data)
+		# raise_exception=True,一旦验证不通过，不再往下执行，直接引发异常
+		serializer.is_valid(raise_exception=True)
+		user = self.perform_create(serializer)
 
+		# 定义给返回给前端的响应体信息,默认只有username和mobile字段
+		re_dict = serializer.data
+		# 使用jwt_payload_handler将user构造成payload，header已经指定好了
+		payload = jwt_payload_handler(user)
+		# 对payload进行加密
+		re_dict["token"] = jwt_encode_handler(payload)
+		re_dict["name"] = user.name if user.name else user.username
+		# 响应头部数据
+		headers = self.get_success_headers(serializer.data)
+
+		# 创建一个用户时，还需要返回给前端具体的创建情况，返回name和token就行了，然后用户再用密码登录网站
+		return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
+
+
+	# 保存实例(必须要重写此方法，不然创建不了实例)
+	def perform_create(self, serializer):
+		return serializer.save()
+
+	'''
+	不需要重写
+	def get_success_headers(self, data):
+		try:
+			return {'Location': data[api_settings.URL_FIELD_NAME]}
+		except (TypeError, KeyError):
+			return {}
+	'''
+
+
+
+
+
+"""
+				post													response
+					|														↗		 ↑
+|----------------------------------------------------|
+|					↓													/			 |					|
+|		获取相关serializer							/			  |					 |
+|					↓					N							/				 |					|
+|			进行数据验证------------>Exception		 |					|
+|					| Y															 |					|
+|				保存实例													  |					 |
+|					↓																 |					|
+|				Response---------------------------|					|
+|																		CreateModelMixin	|
+|-----------------------------------------------------|
+
+"""
