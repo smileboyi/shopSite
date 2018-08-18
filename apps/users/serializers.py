@@ -62,6 +62,16 @@ class UserRegSerializer(serializers.ModelSerializer):
 	username = serializers.CharField(label='用户名',required=True,allow_blank=False,help_text='用户名',
 																	validators=[UniqueValidator(queryset=User.objects.all(), message="用户已经存在")])
 
+	password = serializers.CharField(label='密码',style={'input_type':'password'},write_only=True)
+	
+	# 改用信号量的方式,序列化最多对数据进行验证，不应改写数据，应保持元数据
+	# 改写create,对password加密
+	# def create(self,validated_data):
+	# 	user = super(UserRegSerializer,self).create(validated_data=validated_data)
+	# 	user.set_password(validated_data['password'])
+	# 	user.save()
+	# 	return user
+
 	def validate_code(self,code):
 		# 用户注册，已post方式提交注册信息，post的数据都保存在initial_data里面
 		# username就是用户注册的手机号，验证码按添加时间倒序排序，为了后面验证过期，错误等
@@ -89,4 +99,5 @@ class UserRegSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('username','code','mobile')
+		# 新增记录时需要赋值的字段
+		fields = ('username','code','mobile','password')
