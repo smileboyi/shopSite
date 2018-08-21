@@ -100,9 +100,9 @@ WSGI_APPLICATION = 'shopSite.wsgi.application'
 # 认证后台列表
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',   # 使用自定义基本认证
-    'social_core.backends.weibo.WeiboOAuth2',
-    'social_core.backends.qq.QQOAuth2',
-    'social_core.backends.weixin.WeixinOAuth2',
+    # 'social_core.backends.weibo.WeiboOAuth2',
+    # 'social_core.backends.qq.QQOAuth2',
+    # 'social_core.backends.weixin.WeixinOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -192,7 +192,7 @@ REST_FRAMEWORK = {
         # 保存在数据库中，如果是一个分布式的系统，就非常麻烦
         # token永久有效，没有过期时间
         # 'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication', 不需要全局注册
     ),
 }
 
