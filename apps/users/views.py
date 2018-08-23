@@ -13,7 +13,7 @@ from rest_framework.mixins import CreateModelMixin
 
 from rest_framework import authentication,permissions
 
-from users.serializers import SmsSerializer,UserRegSerializer
+from users.serializers import SmsSerializer,UserRegSerializer,UserDetailSerializer
 
 from utils.yunpian import YunPian
 from shopSite.settings import APIKEY

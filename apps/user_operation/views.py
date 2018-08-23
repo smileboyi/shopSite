@@ -1,8 +1,8 @@
 from rest_framework import viewsets,mixins
 
-from user_operation.models import UserFav
+from user_operation.models import UserFav,UserLeavingMessage
 
-from user_operation.serializers import UserFavSerializer,UserFavDetailSerializer
+from user_operation.serializers import UserFavSerializer,UserFavDetailSerializer,LeavingMessageSerializer
 
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
@@ -52,3 +52,30 @@ class UserFavViewset(viewsets.GenericViewSet,
 JSONWebTokenAuthentication认证不应该全局配置，因为用户获取商品信息或者其它页面的时候并不需要此认证，所以这个认证只要局部中添加就可以
 删除settings中的'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
 """
+
+
+
+
+
+class LeavingMessageViewset(mixins.ListModelMixin,
+														mixins.DestroyModelMixin,
+														mixins.CreateModelMixin,
+														viewsets.GenericViewSet):
+	"""
+	list:
+			获取用户留言
+	create:
+			添加留言
+	delete:
+			删除留言功能
+	"""
+	serializer_class = LeavingMessageSerializer
+
+	authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+	permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+
+	# 删除成功后没有返回信息，可以通过响应头部判断，或者改写destroy方法
+，
+	# 只能看到自己的留言
+	def get_queryset(self):
+		return UserLeavingMessage.objects.filter(user=self.request.user)
