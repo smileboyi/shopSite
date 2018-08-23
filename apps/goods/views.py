@@ -65,7 +65,10 @@ class GoodsListView(generics.ListAPIView):
 # 同时，ViewSet为我们提供了默认的URL结构, 使得我们能更专注于API本身。
 class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 	'''
-	商品列表，分页，搜索，过滤，排序
+	list:
+		商品列表，分页，搜索，过滤，排序
+	retrieve:
+		获取商品详情
 	'''
 	# 查询集，这里必须要定义一个默认的排序,否则会报错
 	queryset = Goods.objects.all().order_by('id')

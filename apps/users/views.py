@@ -89,12 +89,17 @@ class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 
 
 
-class userViewset(CreateModelMixin,viewsets.GenericViewSet):
+class userViewset(CreateModelMixin,
+									mixins.RetrieveModelMixin,
+									mixins.UpdateModelMixin,
+									viewsets.GenericViewSet):
 	'''
 	用户
 	'''
 	serializer_class = UserRegSerializer
 	queryset = User.objects.all()
+
+	authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
 	def create(self, request, *args, **kwargs):
 		# 前面不变，保存数据
@@ -116,6 +121,31 @@ class userViewset(CreateModelMixin,viewsets.GenericViewSet):
 		# 创建一个用户时，还需要返回给前端具体的创建情况，返回name和token就行了，然后用户再用密码登录网站
 		return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
 
+	# 根据请求场景设置动态权限，不是所有场景权限是相同的
+	def get_permissions(self):
+		# 当是get请求获取用户信息时，需要登录
+		if self.action == "retrieve":
+			return [permissions.IsAuthenticated()]
+		elif self.action == "create":
+			return []
+
+		return []
+
+	# 根据请求场景动态使用那个序列化方式
+	def get_serializer_class(self):
+		if self.action == "retrieve":
+			# 获取个人信息时
+			return UserDetailSerializer
+		elif self.action == "create":
+			# 注册的时候
+			return UserRegSerializer
+		# 修改个人信息时
+		return UserDetailSerializer
+
+	# 虽然继承了Retrieve可以获取用户详情，但是并不知道用户的id，所有要重写get_object方法
+	# 重写get_object方法，就知道是哪个用户了
+	def get_object(self):
+			return self.request.user
 
 	# 保存实例(必须要重写此方法，不然创建不了实例)
 	def perform_create(self, serializer):

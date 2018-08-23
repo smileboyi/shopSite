@@ -58,8 +58,8 @@ urlpatterns = [
     path('api-auth/',include('rest_framework.urls')),
     # 资源文件
     path('media/<path:path>',serve,{'document_root':MEDIA_ROOT}),
-    # drf文档
-    path('docs',include_docs_urls(title='drf文档')),
+    # 接口文档（接口说明就是viewset中最前面的注释）
+    path('docs',include_docs_urls(title='接口文档')),
 
     # 商品列表页
     # path('goods/',GoodsListView.as_view(),name='goods-list')
