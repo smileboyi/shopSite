@@ -28,7 +28,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
 from goods.views import GoodsListViewSet,CategoryViewSet
-from user_operation.views import UserFavViewset,LeavingMessageViewset
+from user_operation.views import UserFavViewset,LeavingMessageViewset,AddressViewset
 from users.views import SmsCodeViewset,userViewset
 
 from django.views.generic import TemplateView
@@ -49,7 +49,8 @@ router.register(r'code', SmsCodeViewset, base_name="code")
 router.register(r'users', userViewset, base_name="users")
 # 配置用户留言的url
 router.register(r'messages', LeavingMessageViewset, base_name="messages")
-
+# 配置收货地址的url
+router.register(r'address',AddressViewset , base_name="address")
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
