@@ -2,7 +2,7 @@ from rest_framework import viewsets,mixins
 
 from user_operation.models import UserFav
 
-from user_operation.serializers import UserFavSerializer
+from user_operation.serializers import UserFavSerializer,UserFavDetailSerializer
 
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
@@ -30,6 +30,16 @@ class UserFavViewset(viewsets.GenericViewSet,
 
 	# 搜索的字段
 	lookup_field = 'goods_id'
+
+	def get_serializer_class(self):
+		if self.action == "list":
+			# 当需要返回更多信息时，而不是外键id,可以定义一个嵌套序列类
+			return UserFavDetailSerializer
+		elif self.action == "create":
+			# 收藏时只要id就行了
+			return UserFavSerializer
+		# 取消收藏等操作
+		return UserFavSerializer
 
 	def get_queryset(self):
 		# 只能查看当前登录用户的收藏，不会获取所有用户的收藏

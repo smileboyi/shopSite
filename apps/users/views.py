@@ -11,6 +11,8 @@ from django.db.models import Q
 from rest_framework import mixins,viewsets
 from rest_framework.mixins import CreateModelMixin
 
+from rest_framework import authentication,permissions
+
 from users.serializers import SmsSerializer,UserRegSerializer
 
 from utils.yunpian import YunPian
@@ -21,6 +23,7 @@ from rest_framework import status
 
 # jwt介绍：https://blog.csdn.net/liuwenbiao1203/article/details/52351772
 from rest_framework_jwt.serializers import jwt_encode_handler,jwt_payload_handler
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 # 传入一个列表，元组或字符串，返回随机项
 from random import choice
