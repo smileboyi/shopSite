@@ -30,6 +30,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from goods.views import GoodsListViewSet,CategoryViewSet
 from user_operation.views import UserFavViewset,LeavingMessageViewset,AddressViewset
 from users.views import SmsCodeViewset,userViewset
+from trade.views import ShoppingCartViewset
 
 from django.views.generic import TemplateView
 
@@ -51,6 +52,8 @@ router.register(r'users', userViewset, base_name="users")
 router.register(r'messages', LeavingMessageViewset, base_name="messages")
 # 配置收货地址的url
 router.register(r'address',AddressViewset , base_name="address")
+# 配置购物车的url
+router.register(r'shopcarts', ShoppingCartViewset, base_name="shopcarts")
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),

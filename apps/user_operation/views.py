@@ -55,7 +55,7 @@ JSONWebTokenAuthentication认证不应该全局配置，因为用户获取商品
 
 
 
-
+# 删除留言，只会删除记录，不会删除用户上传的附件，可以使用信号量删除
 class LeavingMessageViewset(mixins.ListModelMixin,
 														mixins.DestroyModelMixin,
 														mixins.CreateModelMixin,
