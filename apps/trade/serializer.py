@@ -110,6 +110,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 	def generate_order_sn(self):
 		# 生成订单号（当前时间+userid+随机数）
+		import time
 		from random import Random
 
 		random_ins = Random()
