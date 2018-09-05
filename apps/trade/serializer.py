@@ -1,4 +1,4 @@
-from trade.models import ShoppingCart
+from trade.models import ShoppingCart,OrderGoods,OrderInfo
 from goods.models import Goods
 
 from goods.serializers import GoodsSerializer
@@ -8,6 +8,9 @@ from rest_framework import serializers
 
 
 class ShopCartSerializer(serializers.Serializer):
+	'''
+	购物车
+	'''
 	user = serializers.HiddenField(
 		default = serializers.CurrentUserDefault()
 	)
@@ -55,3 +58,75 @@ class ShopCartDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ShoppingCart
 		fields = ("goods", "nums")
+
+
+
+class OrderGoodsSerialzier(serializers.ModelSerializer):
+	'''
+	订单商品基本信息
+	'''
+	# 只序列化商品id，其他字段不序列化
+	goods = GoodsSerializer(many=False)
+	
+	class Meta:
+		model = OrderGoods
+		fields = "__all__"
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+	'''
+	商品订单详情
+	'''
+	goods = OrderGoodsSerialzier(many=True)
+	class Meta:
+		model = OrderInfo
+		fields = "__all__"
+
+
+
+
+class OrderSerializer(serializers.ModelSerializer):
+	'''
+	商品订单信息
+	'''
+	user = serializers.HiddenField(
+		default=serializers.CurrentUserDefault()
+	)
+
+	# 下面字段因为不能从post提供，所以需要指明read_only=True
+	order_sn = serializers.CharField(read_only=True)
+
+	# 交易过程中生成
+	pay_status = serializers.CharField(read_only=True)
+	pay_type = serializers.CharField(read_only=True)
+
+	# 支付宝交易时生成
+	trade_no = serializers.CharField(read_only=True)
+	# 微信支付交易时生成
+	nonce_str = serializers.CharField(read_only=True)
+
+	pay_time = serializers.DateTimeField(read_only=True)
+
+
+	def generate_order_sn(self):
+		# 生成订单号（当前时间+userid+随机数）
+		from random import Random
+
+		random_ins = Random()
+		order_sn = "{time_str}{userid}{ranstr}".format(time_str=time.strftime("%Y%m%d%H%M%S"),
+																									userid=self.context['request'].user.id,
+																									ranstr=random_ins.randint(10,99))
+
+		return order_sn
+
+	def validate(self,attrs):
+		# 当所以数据合法时，更新order_sn字段，然后保存到数据库中
+		attrs['order_sn'] = self.generate_order_sn()
+		return attrs
+
+	class Meta:
+		model = OrderInfo
+		fields = "__all__"
+
+
+
