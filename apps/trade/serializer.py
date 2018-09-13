@@ -87,7 +87,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 	alipay_url = serializers.SerializerMethodField(read_only=True)
 	def get_alipay_url(self, obj):
 		alipay = AliPay(
-			appid="2018091300517456",
+			appid="2016091700531867",
 			app_notify_url="http://47.104.158.4:8000/alipay/return/",
 			app_private_key_path=private_key_path,
 			alipay_public_key_path=ali_pub_key_path,
@@ -137,7 +137,7 @@ class OrderSerializer(serializers.ModelSerializer):
 	alipay_url = serializers.SerializerMethodField(read_only=True)
 	def get_alipay_url(self, obj):
 		alipay = AliPay(
-			appid="2018091300517456",
+			appid="2016091700531867",
 			app_notify_url="http://47.104.158.4:8000/alipay/return/",
 			app_private_key_path=private_key_path,
 			alipay_public_key_path=ali_pub_key_path,

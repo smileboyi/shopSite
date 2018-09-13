@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+# Crypto报错：https://blog.csdn.net/liujingqiu/article/details/79109131
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
@@ -135,7 +136,7 @@ if __name__ == "__main__":
 	# 测试用例(调用前先配置)
 	alipay = AliPay(
 		# 沙箱里面的appid值
-		appid="201809131684368",
+		appid="2016091700531867",
 		# notify_url是异步的url
 		app_notify_url="http://127.0.0.1:8000/",
 		# 我们自己商户的密钥
