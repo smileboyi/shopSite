@@ -15,7 +15,7 @@ from rest_framework import mixins
 from datetime import datetime
 from utils.alipay import AliPay
 from rest_framework.views import APIView
-from MxShop.settings import ali_pub_key_path, private_key_path
+from shopSite.settings import ali_pub_key_path, private_key_path
 from rest_framework.response import Response
 
 # Create your views here.

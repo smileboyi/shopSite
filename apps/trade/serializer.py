@@ -6,7 +6,7 @@ from goods.serializers import GoodsSerializer
 from rest_framework import serializers
 
 from utils.alipay import AliPay
-from MxShop.settings import ali_pub_key_path, private_key_path
+from shopSite.settings import ali_pub_key_path, private_key_path
 
 
 
@@ -156,7 +156,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 	def generate_order_sn(self):
 		# 生成订单号（当前时间+userid+随机数）
-		import time
+		import time 
 		from random import Random
 
 		random_ins = Random()
