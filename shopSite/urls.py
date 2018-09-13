@@ -30,7 +30,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from goods.views import GoodsListViewSet,CategoryViewSet
 from user_operation.views import UserFavViewset,LeavingMessageViewset,AddressViewset
 from users.views import SmsCodeViewset,userViewset
-from trade.views import ShoppingCartViewset,OrderViewset
+from trade.views import ShoppingCartViewset,OrderViewset,AlipayView
 
 from django.views.generic import TemplateView
 
@@ -56,6 +56,9 @@ router.register(r'address',AddressViewset , base_name="address")
 router.register(r'shopcarts', ShoppingCartViewset, base_name="shopcarts")
 # 配置订单的url
 router.register(r'orders', OrderViewset, base_name="orders")
+# 配置支付宝支付相关接口的url
+path('alipay/return/', AlipayView.as_view())
+
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),

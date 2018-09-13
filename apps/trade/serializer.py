@@ -5,6 +5,9 @@ from goods.serializers import GoodsSerializer
 
 from rest_framework import serializers
 
+from utils.alipay import AliPay
+from MxShop.settings import ali_pub_key_path, private_key_path
+
 
 
 class ShopCartSerializer(serializers.Serializer):
@@ -67,7 +70,7 @@ class OrderGoodsSerialzier(serializers.ModelSerializer):
 	'''
 	# 只序列化商品id，其他字段不序列化
 	goods = GoodsSerializer(many=False)
-	
+
 	class Meta:
 		model = OrderGoods
 		fields = "__all__"
@@ -78,6 +81,29 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 	商品订单详情
 	'''
 	goods = OrderGoodsSerialzier(many=True)
+
+	# SerializerMethodField：https://blog.csdn.net/kongxx/article/details/50042579
+	# 支付订单的url，不是直接保存在数据表中，因为由很多信息构成，所以查询时使用AliPay类配置获得
+	alipay_url = serializers.SerializerMethodField(read_only=True)
+	def get_alipay_url(self, obj):
+		alipay = AliPay(
+			appid="2018091300517456",
+			app_notify_url="http://47.104.158.4:8000/alipay/return/",
+			app_private_key_path=private_key_path,
+			alipay_public_key_path=ali_pub_key_path,
+			debug=True,
+			return_url="http://47.104.158.4:8000/alipay/return/"
+		)
+
+		url = alipay.direct_pay(
+			subject=obj.order_sn,
+			out_trade_no=obj.order_sn,
+			total_amount=obj.order_mount,
+		)
+		re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+
+		return re_url
+	
 	class Meta:
 		model = OrderInfo
 		fields = "__all__"
@@ -107,6 +133,26 @@ class OrderSerializer(serializers.ModelSerializer):
 
 	pay_time = serializers.DateTimeField(read_only=True)
 
+	# 支付订单的url
+	alipay_url = serializers.SerializerMethodField(read_only=True)
+	def get_alipay_url(self, obj):
+		alipay = AliPay(
+			appid="2018091300517456",
+			app_notify_url="http://47.104.158.4:8000/alipay/return/",
+			app_private_key_path=private_key_path,
+			alipay_public_key_path=ali_pub_key_path,
+			debug=True,
+			return_url="http://47.104.158.4:8000/alipay/return/"
+		)
+
+		url = alipay.direct_pay(
+			subject=obj.order_sn,
+			out_trade_no=obj.order_sn,
+			total_amount=obj.order_mount,
+		)
+		re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+
+		return re_url
 
 	def generate_order_sn(self):
 		# 生成订单号（当前时间+userid+随机数）
