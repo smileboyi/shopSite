@@ -44,6 +44,13 @@ class UserFavViewset(viewsets.GenericViewSet,
 		# 只能查看当前登录用户的收藏，不会获取所有用户的收藏
 		return UserFav.objects.filter(user=self.request.user)
 
+	# 当一位用户收藏商品时，这个商品的关于所有用户收藏总数就要加1
+	# def perform_create(self, serializer):
+	# 	instance = serializer.save()
+	# 	goods = instance.goods
+	# 	goods.fav_num += 1
+	# 	goods.save()
+
 
 """
 只有登录用户才可以收藏

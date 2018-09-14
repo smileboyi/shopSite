@@ -96,6 +96,15 @@ class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
 	# 使用前端过滤，表单组合
 	filter_class = GoodsFilter
 
+	# 当用户进入详情页时表示商品点击数加1
+	def retrieve(self, request, *args, **kwargs):
+		instance = self.get_object()
+		instance.click_num += 1
+		instance.save()
+		serializer = self.get_serializer(instance)
+		
+		return Response(serializer.data)
+
 
 
 class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -103,8 +112,6 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
 	商品分类列表数据(get)
 	'''
 	queryset = GoodsCategory.objects.filter(category_type=1)
-	print('商品数据：')
-	print(queryset)
 	serializer_class = CategorySerializer
 
 
