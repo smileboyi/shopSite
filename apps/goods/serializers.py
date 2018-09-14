@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from goods.models import Goods,GoodsCategory,GoodsImage,Banner,GoodsCategoryBrand,IndexAd
+from goods.models import Goods,GoodsCategory,GoodsImage,Banner,GoodsCategoryBrand,IndexAd,HotSearchWords
 
 from django.db.models import Q
 
@@ -145,4 +145,15 @@ class IndexCategorySerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = GoodsCategory
+		fields = "__all__"
+
+
+
+
+class HotWordsSerializer(serializers.ModelSerializer):
+	'''
+	热搜词
+	'''
+	class Meta:
+		model = HotSearchWords
 		fields = "__all__"

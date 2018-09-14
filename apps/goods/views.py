@@ -13,9 +13,9 @@ from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-from goods.serializers import GoodsSerializer,CategorySerializer,BannerSerializer,IndexCategorySerializer
+from goods.serializers import GoodsSerializer,CategorySerializer,BannerSerializer,IndexCategorySerializer,HotWordsSerializer
 
-from goods.models import Goods,GoodsCategory,Banner,GoodsCategory
+from goods.models import Goods,GoodsCategory,Banner,GoodsCategory,HotSearchWords
 
 from goods.filters import GoodsFilter
 
@@ -133,3 +133,13 @@ class IndexCategoryViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
 	# 获取is_tab=True（导航栏）里面的分类下的商品数据
 	queryset = GoodsCategory.objects.filter(is_tab=True, name__in=["生鲜食品", "酒水饮料"])
 	serializer_class = IndexCategorySerializer
+
+
+
+class HotSearchsViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+	'''
+	热搜词
+	'''
+	# 搜索越多越在前面
+	queryset = HotSearchWords.objects.all().order_by("-index")
+	serializer_class = HotWordsSerializer

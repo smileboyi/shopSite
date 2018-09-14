@@ -27,7 +27,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
-from goods.views import GoodsListViewSet,CategoryViewSet,BannerViewset,IndexCategoryViewset
+from goods.views import GoodsListViewSet,CategoryViewSet,BannerViewset,IndexCategoryViewset,HotSearchsViewset
 from user_operation.views import UserFavViewset,LeavingMessageViewset,AddressViewset
 from users.views import SmsCodeViewset,userViewset
 from trade.views import ShoppingCartViewset,OrderViewset,AlipayView
@@ -62,6 +62,8 @@ path('alipay/return/', AlipayView.as_view())
 router.register(r'banners', BannerViewset, base_name="banners")
 # 首页系列商品展示url
 router.register(r'indexgoods', IndexCategoryViewset, base_name="indexgoods")
+# 热搜词
+router.register(r'hotsearchs', HotSearchsViewset, base_name="hotsearchs")
 
 
 urlpatterns = [
