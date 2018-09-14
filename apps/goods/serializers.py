@@ -1,6 +1,10 @@
 from rest_framework import serializers
 
-from goods.models import Goods,GoodsCategory,GoodsImage,Banner
+from goods.models import Goods,GoodsCategory,GoodsImage,Banner,GoodsCategoryBrand,IndexAd
+
+from django.db.models import Q
+
+
 
 """
 class GoodsSerializer(serializers.Serializer):
@@ -86,4 +90,59 @@ class BannerSerializer(serializers.ModelSerializer):
 	'''
 	class Meta:
 		model = Banner
+		fields = "__all__"
+
+
+
+class BrandSerializer(serializers.ModelSerializer):
+	'''
+	大类下面的宣传商标
+	'''
+	class Meta:
+		model = GoodsCategoryBrand
+		fields = "__all__"
+
+
+
+class IndexCategorySerializer(serializers.ModelSerializer):
+	'''
+	首页商品分类数据:
+		商品商标（多个）
+		大类下的二级类
+		广告商品
+		所有商品
+	'''
+	# 某个大类的商标，可以有多个商标，一对多的关系
+	brands = BrandSerializer(many=True)
+
+	# 取二级商品分类
+	sub_cat = CategorySerializer2(many=True)
+
+	# 广告商品
+	ad_goods = serializers.SerializerMethodField()
+	def get_ad_goods(self, obj):
+		goods_json = {}
+		ad_goods = IndexAd.objects.filter(category_id=obj.id, )
+		if ad_goods:
+			# 取到这个商品id（obj.id唯一，所以[0]）,不能获取商品信息
+			good_ins = ad_goods[0].goods
+			# 通过商品id取商品信息
+			# 嵌套serializer必须添加一个参数context（上下文request）,serializer返回的时候一定要加 “.data” ，这样才是json数据
+			goods_json = GoodsSerializer(good_ins, many=False, context={'request': self.context['request']}).data
+
+		return goods_json
+
+	# good有一个外键category，但这个外键指向的是三级类，直接反向通过外键category（三级类），取某个大类下面的商品是取不出来的
+	goods = serializers.SerializerMethodField()
+	def get_goods(self, obj):
+		# 将这个商品相关父类子类等都可以进行匹配
+		all_goods = Goods.objects.filter(Q(category_id=obj.id) | 
+																			Q(category__parent_category_id=obj.id) | 
+																			Q(category__parent_category__parent_category_id=obj.id))
+		goods_serializer = GoodsSerializer(all_goods, many=True, context={'request': self.context['request']})
+
+		return goods_serializer.data
+
+	class Meta:
+		model = GoodsCategory
 		fields = "__all__"

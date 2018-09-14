@@ -27,7 +27,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
-from goods.views import GoodsListViewSet,CategoryViewSet,BannerViewset
+from goods.views import GoodsListViewSet,CategoryViewSet,BannerViewset,IndexCategoryViewset
 from user_operation.views import UserFavViewset,LeavingMessageViewset,AddressViewset
 from users.views import SmsCodeViewset,userViewset
 from trade.views import ShoppingCartViewset,OrderViewset,AlipayView
@@ -60,6 +60,9 @@ router.register(r'orders', OrderViewset, base_name="orders")
 path('alipay/return/', AlipayView.as_view())
 # 配置首页轮播图的url
 router.register(r'banners', BannerViewset, base_name="banners")
+# 首页系列商品展示url
+router.register(r'indexgoods', IndexCategoryViewset, base_name="indexgoods")
+
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
