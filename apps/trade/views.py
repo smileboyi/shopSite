@@ -46,6 +46,37 @@ class ShoppingCartViewset(viewsets.ModelViewSet):
 	def get_queryset(self):
 		return ShoppingCart.objects.filter(user = self.request.user)
 
+	# 购物车商品数增加，库存数减少
+	# 当要保存对象时候会被调用，serializer表示要保存对象的数据
+	# 疑问：购物车里面的商品会不会占用库存数，相当于这个商品暂时是这个用户的，只是还没购买，然后库存数就会减小
+	def perform_create(self, serializer):
+		shop_cart = serializer.save()
+		goods = shop_cart.goods
+		goods.goods_num -= shop_cart.nums
+		goods.save()
+
+	# 购物车商品数减少，库存数增加
+	# 当要删除对象时候会被调用，instance表示要删除的数据
+	def perform_destroy(self, instance):
+		goods = instance.goods
+		goods.goods_num += instance.nums
+		goods.save()
+		instance.delete()
+
+	# 更新库存
+	def perform_update(self, serializer):
+		existed_record = ShoppingCart.objects.get(id=serializer.instance.id)
+		# 购物车商品数（后端）
+		existed_nums = existed_record.nums
+		# 购物车商品数（前端）
+		saved_record = serializer.save()
+		# 变化的数量
+		nums = saved_record.nums-existed_nums
+		goods = saved_record.goods
+		# nums↓goods_num↑，nums↑goods_num↓
+		goods.goods_num -= nums
+		goods.save()
+
 
 
 
