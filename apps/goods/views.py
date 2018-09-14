@@ -13,11 +13,11 @@ from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-from goods.serializers import GoodsSerializer,CategorySerializer
+from goods.serializers import GoodsSerializer,CategorySerializer,BannerSerializer
 
 from goods.filters import GoodsFilter
 
-from goods.models import Goods,GoodsCategory
+from goods.models import Goods,GoodsCategory,Banner
 # Create your views here.
 
 
@@ -107,4 +107,10 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
 
 
 
+class BannerViewset(mixins.ListModelMixin,viewsets.GenericViewSet):
+	'''
+	首页轮播图
+	'''
+	queryset = Banner.objects.all().order_by('index')
+	serializer_class = BannerSerializer
 

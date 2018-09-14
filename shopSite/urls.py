@@ -27,7 +27,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 # from goods.view_base import GoodsListView
 # from goods.views import GoodsListView
-from goods.views import GoodsListViewSet,CategoryViewSet
+from goods.views import GoodsListViewSet,CategoryViewSet,BannerViewset
 from user_operation.views import UserFavViewset,LeavingMessageViewset,AddressViewset
 from users.views import SmsCodeViewset,userViewset
 from trade.views import ShoppingCartViewset,OrderViewset,AlipayView
@@ -58,7 +58,8 @@ router.register(r'shopcarts', ShoppingCartViewset, base_name="shopcarts")
 router.register(r'orders', OrderViewset, base_name="orders")
 # 配置支付宝支付相关接口的url
 path('alipay/return/', AlipayView.as_view())
-
+# 配置首页轮播图的url
+router.register(r'banners', BannerViewset, base_name="banners")
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
