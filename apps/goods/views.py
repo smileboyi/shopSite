@@ -13,6 +13,9 @@ from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
+
 from goods.serializers import GoodsSerializer,CategorySerializer,BannerSerializer,IndexCategorySerializer,HotWordsSerializer
 
 from goods.models import Goods,GoodsCategory,Banner,GoodsCategory,HotSearchWords
@@ -64,7 +67,7 @@ class GoodsListView(generics.ListAPIView):
 
 # ViewSet类与View类其实几乎是相同的,但提供的是read或update这些操作,而不是get或put等HTTP动作。
 # 同时，ViewSet为我们提供了默认的URL结构, 使得我们能更专注于API本身。
-class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class GoodsListViewSet(CacheResponseMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 	'''
 	list:
 		商品列表，分页，搜索，过滤，排序
@@ -79,6 +82,9 @@ class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
 
 	# 分页
 	pagination_class = GoodsPagination
+
+	# 限流
+	throttle_classes = (UserRateThrottle, AnonRateThrottle)
 
 	# 使用后端过滤，使用搜索过滤和排序过滤
 	filter_backends = (DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter)

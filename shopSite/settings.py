@@ -27,7 +27,7 @@ SECRET_KEY = 'nvwbiy*u@37u9m3q1hz_3f$3^dm6cgty$@q=kty#d)j$3bq1hs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','wl22.free.ngrok.cc',]
+ALLOWED_HOSTS = ['127.0.0.1','localhost','wl22.free.ngrok.cc','47.104.158.4']
 
 
 #重载系统的用户，让UserProfile生效
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',  # 站点缓存 ， 注意必须在第一个位置
     'corsheaders.middleware.CorsMiddleware',   # 必须在CsrfViewMiddleware之前
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # 管理会话
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # 使用会话将用户与请求关联
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # 站点缓存, 注意必须在最后一个位置
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -194,6 +196,16 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication', 不需要全局注册
     ),
+    # 限速设置（全局配置，可以针对视图设置）
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',   # 未登陆用户，通过IP地址判断
+        'rest_framework.throttling.UserRateThrottle'    # 登陆用户，通过token判断
+    ),
+    # DEFAULT_THROTTLE_RATES 包括 second, minute, hour, day
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/minute',         # 每分钟可以请求5次
+        'user': '7/minute'          # 每分钟可以请求7次
+    }
 }
 
 
@@ -214,3 +226,29 @@ APIKEY = "2b65704bc23ae4ed25f1aa59d61563c1"
 # 支付宝相关的key
 private_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_private_2048.txt')
 ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_public_2048.txt')
+
+
+
+# drf扩展缓存
+# http://chibisov.github.io/drf-extensions/docs/#caching
+# https://blog.csdn.net/wang785994599/article/details/80896320
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default',
+}
+
+# django缓存，指定为redis缓存
+# 缓存的类型：https://www.cnblogs.com/ccorz/p/5881605.html
+# 使用的方式：站点缓存（中间件），视图缓存（通过装饰器和通过url），Template片断缓存，底层缓存API（使用api自己做缓存）
+# https://django-redis-chs.readthedocs.io/zh_CN/latest/
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
