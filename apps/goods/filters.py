@@ -1,3 +1,4 @@
+# https://django-filter.readthedocs.io/en/master/guide/usage.html#the-filter
 import django_filters
 
 from django.db.models import Q
@@ -10,8 +11,8 @@ class GoodsFilter(django_filters.rest_framework.FilterSet):
 	'''商品过滤的类'''
 	
 	# 自定义过滤字段和过滤行为
-	pricemin = django_filters.NumberFilter(label="shop_price", lookup_expr='gte', help_text='最低价格')
-	pricemax = django_filters.NumberFilter(label="shop_price", lookup_expr='lte', help_text='最高价格')
+	pricemin = django_filters.NumberFilter(field_name="shop_price", lookup_expr='gt', help_text='最低价格')
+	pricemax = django_filters.NumberFilter(field_name="shop_price", lookup_expr='lt', help_text='最高价格')
 
 	# 外键字段
 	top_category = django_filters.NumberFilter(label="category", method='top_category_filter')
